@@ -1,10 +1,19 @@
-# README
-....
+# jsonschema2xsd
+Exploring multiple libraries, alternatives and technology for parsing unpredictable size JSON Schema and converting it to XSD.
 
-<<<<<<< HEAD
+## Using Node Libraries
+- Oboe.JS
+
+To begin
+
+
+## Using Java Libraries
+- Jackson
+- GSON
+- Boon JSON
+
+is still a work in progress...
+
 # Reference
-....
-=======
-# References
-....
->>>>>>> bb6130f4b734d0c365c023f637c274b10e89d404
+http://oboejs.com/
+
