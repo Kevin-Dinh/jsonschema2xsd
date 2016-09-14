@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+var oboe = require('oboe');
+
+var start = new Date();
+
+/*
+ * Why Oboe JS?
+ * http://oboejs.com/why
+ */
+
+/*
+ * testing oboe with large json files...
+ * https://jsonplaceholder.typicode.com/photos	1MB	OK
+ * https://github.com/zemirco/sf-city-lots-json/blob/master/citylots.json 	190MB Failing....
+ */
+
+var jsonResource = 'https://jsonplaceholder.typicode.com/photos';
+
+oboe(jsonResource)
+	.node('!.*', function(node){
+	  /* printing node to view contents */
+      console.log(node);
+	})
+	.done(function(things) {
+		var end = new Date() - start;
+		console.log("\n\n");
+		console.log("JSON Resource: %s", jsonResource);
+		console.log("Execution time: %dms", end);
+		console.log("\n\n");
+	})
+	.fail(function() {
+		console.log("FAILED!!!");
+   	});
+
