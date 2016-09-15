@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var oboe = require('oboe');
-
 var start = new Date();
 
 /*
