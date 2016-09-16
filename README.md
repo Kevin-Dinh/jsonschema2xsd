@@ -23,4 +23,10 @@ Command                      | Description
 `jsonschema2xsd -u https://.../basicschema.json`       | Converts schema to xsd
 `cat schema.json | jsonschema2xsd`       | Converts pipe data to xsd
 
+## LIMITATIONS
+- Does not support yet definitions
+- Automated test non existent
+- Complex restrictions
+- etc...
+
 It's still a work in progress...
