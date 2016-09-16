@@ -1,0 +1,22 @@
+{
+        "type": "object",
+        "id": "Semaphore.POST.req.body.schema.json",
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "additionalProperties": false,
+        "title": "Flag",
+        "properties": {
+                "flagName": {
+                        "type": [
+                                "string",
+                                "null"
+                        ],
+                        "maxLength": 128,
+                        "required": true,
+                        "minLength": 1
+                },
+                "flagStatus": {
+                        "type": "boolean",
+                        "required": true
+                }
+        }
+}
