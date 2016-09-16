@@ -24,15 +24,39 @@ Command                      | Description
 `cat schema.json | jsonschema2xsd`       | Converts pipe data to xsd
 
 ## LIMITATIONS
-- Does not support yet definitions
-- Automated test non existent
-- Complex restrictions
-- additionalItems
-- oneOf
-- type arrays
-- $ref
-- etc...
+- [Keywords for numbers](#keywords-for-numbers)
+    - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
+    - [multipleOf](#multipleof)
+- [Keywords for strings](#keywords-for-strings)
+    - [maxLength/minLength](#maxlength--minlength)
+    - [pattern](#pattern)
+    - [format](#format)
+    - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum](#formatmaximum--formatminimum-and-exclusiveformatmaximum--exclusiveformatminimum-v5-proposal) (v5)
+- [Keywords for arrays](#keywords-for-arrays)
+    - [maxItems/minItems](#maxitems--minitems)
+    - [uniqueItems](#uniqueitems)
+    - [items](#items)
+    - [additionalItems](#additionalitems)
+    - [contains](#contains-v5-proposal) (v5)
+- [Keywords for objects](#keywords-for-objects)
+    - [maxProperties/minProperties](#maxproperties--minproperties)
+    - [required](#required)
+    - [properties](#properties)
+    - [patternProperties](#patternproperties)
+    - [additionalProperties](#additionalproperties)
+    - [dependencies](#dependencies)
+    - [patternGroups](#patterngroups-v5-proposal) (v5)
+    - [patternRequired](#patternrequired-v5-proposal) (v5)
+- [Keywords for all types](#keywords-for-all-types)
+    - [enum](#enum)
+    - [constant](#constant-v5-proposal) (v5)
+    - [not](#not)
+    - [oneOf](#oneof)
+    - [anyOf](#anyof)
+    - [allOf](#allof)
+    - [switch](#switch-v5-proposal) (v5)
 
 It's still a work in progress...
 Code has not been refactored, prettified or modularized as of this moment.
 Currently on prototyping phase.
+No automated test as of the moment.
