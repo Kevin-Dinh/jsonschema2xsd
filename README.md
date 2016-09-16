@@ -27,6 +27,10 @@ Command                      | Description
 - Does not support yet definitions
 - Automated test non existent
 - Complex restrictions
+- additionalItems
+- oneOf
+- type arrays
+- $ref
 - etc...
 
 It's still a work in progress...
