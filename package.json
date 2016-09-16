@@ -1,0 +1,23 @@
+{
+  "name": "jsonschema2xsd",
+  "version": "0.0.1",
+  "description": "testing oboe.js",
+  "main": "jsonschema2xsd",
+  "scripts": {
+    "test": "jsonschema2xsd"
+  },
+  "bin": {
+    "jsonschema2xsd": "./bin/jsonschema2xsd"
+  },
+  "author": "dpg",
+  "license": "MIT",
+  "dependencies": {
+    "byline": "^5.0.0",
+    "jsonpath": "^0.2.7",
+    "minimist": "^1.2.0",
+    "oboe": "^2.1.2",
+    "request": "^2.74.0",
+    "util": "^0.10.3",
+    "xml": "^1.0.1"
+  }
+}

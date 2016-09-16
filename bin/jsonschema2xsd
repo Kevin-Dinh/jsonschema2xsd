@@ -1,0 +1,227 @@
+#!/usr/bin/env node
+
+var request = require('request');
+var xml = require('xml');
+var util = require('util');
+var colors = require('colors');
+var jpath = require('jsonpath');
+var byline = require('byline');
+var fs = require('fs');
+
+var jsonSchemaResource = "https://raw.githubusercontent.com/donniegallardo/jsonschema2xsd/master/oboetest/exampleschema.json";
+
+var schemaProps = [ 
+	"type",
+	"enum",
+	"$schema",
+	"additionalProperties",
+	"required",
+	"definitions",
+	"default",
+	"description"
+];  
+
+var out;
+var tab = [];
+
+var start = new Date();
+if (process.stdin.isTTY) {
+  // handle shell arguments
+	var argv = require('minimist')(process.argv.slice(2));
+	var filepath = argv._[0] || argv.f;
+	var url = argv.u;
+	var help = argv.h;
+	if(filepath != undefined){
+		processFromFile(filepath);
+	} 
+	else if(url != undefined){
+		processFromUrl(url);
+	}
+	else {
+		printHelp();
+	}	
+} else {
+  // handle piped content 
+	var input = [];
+	var stream = byline(process.stdin);
+	stream.on("data", function (line) {
+		input.push(line + "");
+	}).on("end", function () {
+		processInput(input.join("\n"));
+	});
+}
+
+function processFromFile(filepath){
+	fs.readFile(filepath, 'utf8', function (err,data) {
+		if (err) {
+			return console.log(err);
+		}
+		processInput(data);
+	});
+}
+
+function processFromUrl(url){
+	request(url, function (error, response, data) {
+		if (!error && response.statusCode == 200) {
+			processInput(data);
+		}
+	})
+}
+
+function processInput(data){
+	var jsonData;
+	try {
+		jsonData = JSON.parse(data);
+	} catch (e) {
+		process.stderr.write(colors.red("ERROR: Unable to parse JSON schema! Invalid JSON data structure!\n\n"));
+		process.exit();
+	}
+	out = xml({"?xml": { _attr: { version:"1.0", encoding: "UTF-8"}}});
+	out += "\n" + xml({"xs:schema": { _attr: { "xmlns:xs":"http://www.w3.org/2001/XMLSchema"}}});
+	processData(jsonData, undefined);
+	console.log(formatXml(out));
+	var end = new Date() - start;
+	console.log("Execution time: %dms", end);
+}
+
+
+function getTab(){
+	return tab.toString().replace(/,/g, '');
+}
+
+function element(name, type){
+	out += "\n" + xml({"xs:element": { _attr: { "name":name}}});
+}
+
+function intRestrictions(minimum, maximum){
+	tab.push("\t");
+	out += "\n " + getTab() + "<xs:simpleType>";
+	out += "\n " + getTab() + "<xs:restriction base=\"xs:integer\"";
+	if(undefined != minimum || undefined != maximum){
+		tab.push("\t");
+		out += ">"
+		out += (undefined != minimum) ? "\n " + getTab() + xml({"xs:minInclusive": { _attr: { "value":minimum}}}) : "";
+		out += (undefined != maximum) ? "\n " + getTab() + xml({"xs:maxInclusive": { _attr: { "value":maximum}}}) : "";
+		out += "\n " + getTab() + "</xs:restriction>";
+		tab.pop();
+	} else {
+		out += " />";
+	}					
+	out += "\n " + getTab() + "</xs:simpleType>";
+	tab.pop();
+}
+
+function processData(input, property){	
+	tab.push("\t");
+	var title = jpath.value(input, "$.title");	
+	var type = jpath.value(input, "$.type");
+	var properties = jpath.value(input, "$.properties");
+	var required = jpath.value(input, "$.required");
+	var nullable = jpath.value(input, "$.nullable");
+	var minimum =  jpath.value(input, "$.minimum");
+	var maximum =  jpath.value(input, "$.maximum");
+
+	if(typeof input == "object" && !property){			
+		if("object" == type &&  typeof properties == "object"){
+			element(title, undefined);
+			complexType(input);
+		} else {
+			for(var name in input){
+				processData(input[name], name);
+			}
+		}
+	} else {
+		element(property, type);
+		if("integer" == type){
+			intRestrictions(minimum, maximum);
+		}
+	}
+	tab.pop();
+}
+
+function complexType(input){
+	out += "\n<xs:complexType name=\"" + ((input && input.title) ? input.title : "") + "\">";
+	out += "\n<xs:sequence>";
+	for(var name in input){
+		if (typeof input[name] == "object" && !~schemaProps.indexOf(name)) {
+			processData(input[name], undefined);
+		}		
+	}
+	out += "\n</xs:sequence>";
+	out += "\n</xs:complexType>";
+	
+}
+
+function simpleType(input){
+	for(var name in input){
+		processData(input[name], name);
+	}
+}
+
+function printHelp() {
+	var help = "Usage:\n" + //
+		"jsonschema2xsd <file>\n" + //
+		"jsonschema2xsd -f <file>\n" + //
+		"jsonschema2xsd -u <file>\n" + //
+		"jsonschema2xsd:\n" + //
+		"\t-f if you want to process a file. default\n" + //
+		"\t-u if you want to process from a given URL\n" + //
+		"\t-h this help\n" + //
+		"\n" + //
+		"*** jsonschema2xsd also supports pipe in data. e.g. echo \"Hello\" | jsonschema2xsd\n";
+
+	console.log(help);
+}
+
+function formatXml(xml) {
+	var reg = /(>)\s*(<)(\/*)/g; // updated Mar 30, 2015
+	var wsexp = / *(.*) +\n/g;
+	var contexp = /(<.+>)(.+\n)/g;
+	xml = xml.replace(reg, '$1\n$2$3').replace(wsexp, '$1\n').replace(contexp, '$1\n$2');
+	var pad = 0;
+	var formatted = '';
+	var lines = xml.split('\n');
+	var indent = 0;
+	var lastType = 'other';
+	// 4 types of tags - single, closing, opening, other (text, doctype, comment) - 4*4 = 16 transitions 
+	var transitions = {
+			'single->single': 0,
+			'single->closing': -1,
+			'single->opening': 0,
+			'single->other': 0,
+			'closing->single': 0,
+			'closing->closing': -1,
+			'closing->opening': 0,
+			'closing->other': 0,
+			'opening->single': 1,
+			'opening->closing': 0,
+			'opening->opening': 1,
+			'opening->other': 1,
+			'other->single': 0,
+			'other->closing': -1,
+			'other->opening': 0,
+			'other->other': 0
+	};
+
+	for (var i = 0; i < lines.length; i++) {
+			var ln = lines[i];
+			var single = Boolean(ln.match(/<.+\/>/)); // is this line a single tag? ex. <br />
+			var closing = Boolean(ln.match(/<\/.+>/)); // is this a closing tag? ex. </a>
+			var opening = Boolean(ln.match(/<[^!].*>/)); // is this even a tag (that's not <!something>)
+			var type = single ? 'single' : closing ? 'closing' : opening ? 'opening' : 'other';
+			var fromTo = lastType + '->' + type;
+			lastType = type;
+			var padding = '';
+
+			indent += transitions[fromTo];
+			for (var j = 0; j < indent; j++) {
+					padding += '\t';
+			}
+			if (fromTo == 'opening->closing')
+					formatted = formatted.substr(0, formatted.length - 1) + ln + '\n'; // substr removes line break (\n) from prev loop
+			else
+					formatted += padding + ln + '\n';
+	}
+
+	return formatted;
+};
