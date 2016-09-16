@@ -13,7 +13,7 @@ var out;
 var tab = [];
 var xw = new XMLWriter;
 var start = new Date();
-var schemaProps = [ 
+var schemaProps = [
 	"type",
 	"enum",
 	"$schema",
@@ -22,25 +22,25 @@ var schemaProps = [
 	"definitions",
 	"default",
 	"description"
-];  
+];
 
 if (process.stdin.isTTY) {
-  // handle shell arguments
+	// handle shell arguments
 	var argv = require('minimist')(process.argv.slice(2));
 	var filepath = argv._[0] || argv.f;
 	var url = argv.u;
 	var help = argv.h;
-	if(filepath != undefined){
+	if (filepath != undefined) {
 		processFromFile(filepath);
-	} 
-	else if(url != undefined){
+	}
+	else if (url != undefined) {
 		processFromUrl(url);
 	}
 	else {
 		printHelp();
-	}	
+	}
 } else {
-  // handle piped content 
+	// handle piped content 
 	var input = [];
 	var stream = byline(process.stdin);
 	stream.on("data", function (line) {
@@ -50,8 +50,8 @@ if (process.stdin.isTTY) {
 	});
 }
 
-function processFromFile(filepath){
-	fs.readFile(filepath, 'utf8', function (err,data) {
+function processFromFile(filepath) {
+	fs.readFile(filepath, 'utf8', function (err, data) {
 		if (err) {
 			return console.log(err);
 		}
@@ -59,7 +59,7 @@ function processFromFile(filepath){
 	});
 }
 
-function processFromUrl(url){
+function processFromUrl(url) {
 	request(url, function (error, response, data) {
 		if (!error && response.statusCode == 200) {
 			processInput(data);
@@ -67,7 +67,7 @@ function processFromUrl(url){
 	})
 }
 
-function processInput(data){
+function processInput(data) {
 	var jsonData;
 	try {
 		jsonData = JSON.parse(data);
@@ -75,7 +75,7 @@ function processInput(data){
 		process.stderr.write(colors.red("ERROR: Unable to parse JSON schema! Invalid JSON data structure!\n\n"));
 		process.exit();
 	}
-	
+
 	xw.startDocument();
 	xw.writeAttribute("encoding", "UTF-8");
 	xw.startElement("xs:schema");
@@ -88,72 +88,96 @@ function processInput(data){
 	//console.log(colors.green("Execution time: " + end + "ms"));
 }
 
-function element(name, type){
+function element(name, type) {
 	xw.startElement("xs:element");
-	xw.writeAttribute("name", name);
+	if(name != undefined){
+		xw.writeAttribute("name", name);
+	}
+	if(type != undefined){
+		if(typeof type == "string"){
+			xw.writeAttribute("type", type);
+		}
+		else if(typeof type == "object"){
+			var typename = jpath.value(type, "$.type");
+			if(type != undefined){
+				xw.writeAttribute("type", typename);
+			}
+		}
+	}
 	xw.endElement();
 }
 
-function intRestrictions(minimum, maximum){
+function intRestrictions(minimum, maximum) {
 	xw.startElement("xs:simpleType");
 	xw.startElement("xs:restriction");
 	xw.writeAttribute("base", "xs:integer");
-	if(undefined != minimum){
+	if (undefined != minimum) {
 		xw.startElement("xs:minInclusive");
 		xw.writeAttribute("value", minimum);
+		xw.endElement();
 	}
-	if(undefined != maximum){
+	if (undefined != maximum) {
 		xw.startElement("xs:maxInclusive");
 		xw.writeAttribute("value", maximum);
+		xw.endElement();
 	}
 	xw.endElement();
-	xw.endElement();			
+	xw.endElement();
 	tab.pop();
 }
 
-function processData(input, property){	
-	var title = jpath.value(input, "$.title");	
-	var type = jpath.value(input, "$.type");
-	var properties = jpath.value(input, "$.properties");
-	var required = jpath.value(input, "$.required");
-	var nullable = jpath.value(input, "$.nullable");
-	var minimum =  jpath.value(input, "$.minimum");
-	var maximum =  jpath.value(input, "$.maximum");
-
-	if(typeof input == "object" && !property){			
-		if("object" == type &&  typeof properties == "object"){
+function processData(input, property) {
+	var title, type, properties, items, required, nullable, minimum, maximum;
+	if(typeof input == "object"){
+		title = jpath.value(input, "$.title");
+		type = jpath.value(input, "$.type");
+		properties = jpath.value(input, "$.properties");
+		items = jpath.value(input, "$.items");
+		required = jpath.value(input, "$.required");
+		nullable = jpath.value(input, "$.nullable");
+		minimum = jpath.value(input, "$.minimum");
+		maximum = jpath.value(input, "$.maximum");
+	}
+	if (typeof input == "object" && !property) {
+		if ("object" == type && typeof properties == "object") {
 			element(title, undefined);
 			complexType(input);
+		}
+		else if("array" == type && typeof items == "object"){ 
+			simpleType(input);
 		} else {
-			for(var name in input){
+			for (var name in input) {
 				processData(input[name], name);
 			}
 		}
-	} else {
+	} else if(property && type) {
 		element(property, type);
-		if("integer" == type){
+		if ("integer" == type) {
 			intRestrictions(minimum, maximum);
 		}
 	}
 }
 
-function complexType(input){
+function complexType(input) {
 	xw.startElement("xs:complexType");
 	xw.writeAttribute("name", ((input && input.title) ? input.title : ""));
 	xw.startElement("xs:sequence");
-	for(var name in input){
+	for (var name in input) {
 		if (typeof input[name] == "object" && !~schemaProps.indexOf(name)) {
 			processData(input[name], undefined);
-		}		
+		}
 	}
 	xw.endElement();
 	xw.endElement();
 }
 
-function simpleType(input){
-	for(var name in input){
-		processData(input[name], name);
+function simpleType(input) {
+	xw.startElement("xs:simpleType");
+	xw.writeAttribute("name", "array");
+	for (var name in input) {
+		processData(input[name], undefined);
 	}
+	xw.endElement();
 }
 
 function printHelp() {
