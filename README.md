@@ -26,14 +26,14 @@ Command                      | Description
 ## LIMITATIONS
 - [Keywords for numbers](#keywords-for-numbers)
     - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
-    - [divisibleBy draft-03]
-    - [multipleOf draft-04]
+    - [divisibleBy](#) draft-03
+    - [multipleOf](#) draft-04
 - [Keywords for strings](#keywords-for-strings)
     - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum] (v5)
 - [Keywords for arrays](#keywords-for-arrays)
     - [maxItems/minItems](#maxitems--minitems)
-    - [uniqueItems]
-    - [additionalItems]
+    - [uniqueItems](#) 
+    - [additionalItems](#) 
     - [contains](#contains-v5-proposal) (v5)
 - [Keywords for objects](#keywords-for-objects)
     - [maxProperties/minProperties](#maxproperties--minproperties)
