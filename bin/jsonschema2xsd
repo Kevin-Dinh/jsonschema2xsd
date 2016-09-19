@@ -1,28 +1,12 @@
 #!/usr/bin/env node
 
 var request = require('request');
-var util = require('util');
 var colors = require('colors');
-var jpath = require('jsonpath');
 var byline = require('byline');
 var fs = require('fs');
-var XMLWriter = require('xml-writer');
-var pd = require('pretty-data').pd;
+var XSDifyJSONSchema = require('../lib/XSDifyJSONSchema')
 
-var out;
-var tab = [];
-var xw = new XMLWriter;
 var start = new Date();
-var schemaProps = [
-	"type",
-	"enum",
-	"$schema",
-	"additionalProperties",
-	"required",
-	"definitions",
-	"default",
-	"description"
-];
 
 if (process.stdin.isTTY) {
 	// handle shell arguments
@@ -76,121 +60,23 @@ function processInput(data) {
 		process.exit();
 	}
 
-	xw.startDocument();
-	xw.writeAttribute("encoding", "UTF-8");
-	xw.startElement("xs:schema");
-	xw.writeAttribute("xmlns:xs", "http://www.w3.org/2001/XMLSchema");
-	processData(jsonData, undefined);
-	xw.endElement();
-	xw.endDocument();
-	console.log(pd.xml(xw.toString()));
+	console.log(XSDifyJSONSchema(jsonData));
+
 	//var end = new Date() - start;
 	//console.log(colors.green("Execution time: " + end + "ms"));
 }
 
-function element(name, type) {
-	xw.startElement("xs:element");
-	if(name != undefined){
-		xw.writeAttribute("name", name);
-	}
-	if(type != undefined){
-		if(typeof type == "string"){
-			xw.writeAttribute("type", type);
-		}
-		else if(typeof type == "object"){
-			var typename = jpath.value(type, "$.type");
-			if(type != undefined){
-				xw.writeAttribute("type", typename);
-			}
-		}
-	}
-	xw.endElement();
-}
-
-function intRestrictions(minimum, maximum) {
-	xw.startElement("xs:simpleType");
-	xw.startElement("xs:restriction");
-	xw.writeAttribute("base", "xs:integer");
-	if (undefined != minimum) {
-		xw.startElement("xs:minInclusive");
-		xw.writeAttribute("value", minimum);
-		xw.endElement();
-	}
-	if (undefined != maximum) {
-		xw.startElement("xs:maxInclusive");
-		xw.writeAttribute("value", maximum);
-		xw.endElement();
-	}
-	xw.endElement();
-	xw.endElement();
-	tab.pop();
-}
-
-function processData(input, property) {
-	var title, type, properties, items, required, nullable, minimum, maximum;
-	if(typeof input == "object"){
-		title = jpath.value(input, "$.title");
-		type = jpath.value(input, "$.type");
-		properties = jpath.value(input, "$.properties");
-		items = jpath.value(input, "$.items");
-		required = jpath.value(input, "$.required");
-		nullable = jpath.value(input, "$.nullable");
-		minimum = jpath.value(input, "$.minimum");
-		maximum = jpath.value(input, "$.maximum");
-	}
-	if (typeof input == "object" && !property) {
-		if ("object" == type && typeof properties == "object") {
-			element(title, undefined);
-			complexType(input);
-		}
-		else if("array" == type && typeof items == "object"){ 
-			simpleType(input);
-		} else {
-			for (var name in input) {
-				processData(input[name], name);
-			}
-		}
-	} else if(property && type) {
-		element(property, type);
-		if ("integer" == type) {
-			intRestrictions(minimum, maximum);
-		}
-	}
-}
-
-function complexType(input) {
-	xw.startElement("xs:complexType");
-	xw.writeAttribute("name", ((input && input.title) ? input.title : ""));
-	xw.startElement("xs:sequence");
-	for (var name in input) {
-		if (typeof input[name] == "object" && !~schemaProps.indexOf(name)) {
-			processData(input[name], undefined);
-		}
-	}
-	xw.endElement();
-	xw.endElement();
-}
-
-function simpleType(input) {
-	xw.startElement("xs:simpleType");
-	xw.writeAttribute("name", "array");
-	for (var name in input) {
-		processData(input[name], undefined);
-	}
-	xw.endElement();
-}
-
 function printHelp() {
 	var help = "Usage:\n" + //
-		"jsonschema2xsd <file>\n" + //
-		"jsonschema2xsd -f <file>\n" + //
-		"jsonschema2xsd -u <file>\n" + //
-		"jsonschema2xsd:\n" + //
+		"J2Xv2 <file>\n" + //
+		"J2Xv2 -f <file>\n" + //
+		"J2Xv2 -u <file>\n" + //
+		"J2Xv2:\n" + //
 		"\t-f if you want to process a file. default\n" + //
 		"\t-u if you want to process from a given URL\n" + //
 		"\t-h this help\n" + //
 		"\n" + //
-		"*** jsonschema2xsd also supports pipe in data. e.g. echo \"Hello\" | jsonschema2xsd\n";
+		"*** J2Xv2 also supports pipe in data. e.g. echo \"Hello\" | J2Xv2\n";
 
 	console.log(help);
 }
