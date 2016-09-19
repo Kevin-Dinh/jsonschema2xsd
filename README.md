@@ -26,22 +26,18 @@ Command                      | Description
 ## LIMITATIONS
 - [Keywords for numbers](#keywords-for-numbers)
     - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
-    - [multipleOf](#multipleof)
+    - [divisibleBy draft-03]
+    - [multipleOf draft-04]
 - [Keywords for strings](#keywords-for-strings)
-    - [maxLength/minLength](#maxlength--minlength)
-    - [pattern](#pattern)
-    - [format](#format)
-    - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum](#formatmaximum--formatminimum-and-exclusiveformatmaximum--exclusiveformatminimum-v5-proposal) (v5)
+    - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum] (v5)
 - [Keywords for arrays](#keywords-for-arrays)
     - [maxItems/minItems](#maxitems--minitems)
-    - [uniqueItems](#uniqueitems)
-    - [items](#items)
-    - [additionalItems](#additionalitems)
+    - [uniqueItems]
+    - [additionalItems]
     - [contains](#contains-v5-proposal) (v5)
 - [Keywords for objects](#keywords-for-objects)
     - [maxProperties/minProperties](#maxproperties--minproperties)
-    - [required](#required)
-    - [properties](#properties)
+    - [required draft-v04](#required)
     - [patternProperties](#patternproperties)
     - [additionalProperties](#additionalproperties)
     - [dependencies](#dependencies)
