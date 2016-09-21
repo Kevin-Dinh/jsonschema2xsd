@@ -52,6 +52,10 @@ Command                      | Description
     - [allOf](#allof)
     - [switch](#switch-v5-proposal) (v5)
 
+## REFERENCES
+
+- https://docs.oracle.com/cd/E12461_01/140/funtional_artifacts_guide/or-fasg-standards.htm
+
 It's still a work in progress...
 Code has not been refactored, prettified or modularized as of this moment.
 Currently on prototyping phase.

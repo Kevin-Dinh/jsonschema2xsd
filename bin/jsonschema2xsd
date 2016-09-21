@@ -7,13 +7,13 @@ var fs = require('fs');
 var XSDifyJSONSchema = require('../lib/XSDifyJSONSchema')
 
 var start = new Date();
+var argv = require('minimist')(process.argv.slice(2));
 
 if (process.stdin.isTTY) {
 	// handle shell arguments
-	var argv = require('minimist')(process.argv.slice(2));
 	var filepath = argv._[0] || argv.f;
 	var url = argv.u;
-	var help = argv.h;
+
 	if (filepath != undefined) {
 		processFromFile(filepath);
 	}
@@ -60,23 +60,41 @@ function processInput(data) {
 		process.exit();
 	}
 
-	console.log(XSDifyJSONSchema(jsonData));
+	console.log(XSDifyJSONSchema(jsonData, argv));
 
 	//var end = new Date() - start;
 	//console.log(colors.green("Execution time: " + end + "ms"));
 }
 
 function printHelp() {
-	var help = "Usage:\n" + //
-		"J2Xv2 <file>\n" + //
-		"J2Xv2 -f <file>\n" + //
-		"J2Xv2 -u <file>\n" + //
-		"J2Xv2:\n" + //
-		"\t-f if you want to process a file. default\n" + //
-		"\t-u if you want to process from a given URL\n" + //
-		"\t-h this help\n" + //
-		"\n" + //
-		"*** J2Xv2 also supports pipe in data. e.g. echo \"Hello\" | J2Xv2\n";
+	var help = "Usage:\tjsonschema2xsd [filepath|-f filepath|-u filepath] [options]\n" + 
+		"\tjsonschema2xsd <filepath>\n\n" + 
+		
+		"Options:\n" + 
+		"  -f  <filepath>   Convert JSON schema to XSD using given a filepath.\n" + 
+		"  -u  <filepath>   Convert JSON schema to XSD from a given URL\n" +
+		"  -b               Set top level/global element name.(optional)\n" +
+		"                   e.g. -b SupplierBO\n" +
+		"                   If your JSON schema has no top level/global name, then\n" +  
+		"                   you should specify this option in order to have a valid schema.\n\n" +
+		"  -t               Set target namespace. (optional)\n" +
+		"  -x               Set XML namespace. (optional)\n" +
+		"  -e               Set elementFormDefault. (optional)\n" +  
+		"  -h               Displays this help\n" + 
+		"\n\n" +
+		"  jsonschema2xsd -f jsonschema.json -b SupplierInfo -t http://../../SupplierInfo.xsd -x http://../../SupplierInfo.xsd -e qualified\n" +
+		"  <?xml version=\"1.0\"?>\n" +
+		"    <xs:schema\n" +
+		"        targetNamespace=\"http://../../SupplierInfo.xsd\"\n" + 
+  		"        xmlns:xs=\"http://../../SupplierInfo.xsd\"\n" +
+		"        elementFormDefault=\"qualified\">\n" +
+        "          <xs:element name=\"SupplierInfo\">\n" + 
+		"          ....\n" +
+		"    </schema>"+
+		"\n\n" +  
+		"Note:\n" + 
+		"   jsonschema2xsd also supports pipe in data.\n" +
+		"   e.g. echo '{\"message\": {\"type\":\"string\"}}' | jsonschema2xsd\n";
 
 	console.log(help);
 }
