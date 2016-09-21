@@ -27,7 +27,6 @@ Command                      | Description
 - [Keywords for numbers](#keywords-for-numbers)
     - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
     - [divisibleBy](#) draft-03
-    - [multipleOf](#) draft-04
 - [Keywords for strings](#keywords-for-strings)
     - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum] (v5)
 - [Keywords for arrays](#keywords-for-arrays)
@@ -45,16 +44,12 @@ Command                      | Description
     - [patternRequired](#patternrequired-v5-proposal) (v5)
 - [Keywords for all types](#keywords-for-all-types)
     - [enum](#enum)
-    - [constant](#constant-v5-proposal) (v5)
-    - [not](#not)
-    - [oneOf](#oneof)
-    - [anyOf](#anyof)
-    - [allOf](#allof)
-    - [switch](#switch-v5-proposal) (v5)
 
 ## REFERENCES
 
+- https://tools.ietf.org/rfcdiff?url1=draft-zyp-json-schema-03.txt&url2=draft-zyp-json-schema-04.txt
 - https://docs.oracle.com/cd/E12461_01/140/funtional_artifacts_guide/or-fasg-standards.htm
+- https://tools.ietf.org/rfcdiff?url1=draft-zyp-json-schema-03.txt&url2=draft-zyp-json-schema-04.txt
 
 It's still a work in progress...
 Code has not been refactored, prettified or modularized as of this moment.

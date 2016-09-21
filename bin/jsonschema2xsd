@@ -5,6 +5,7 @@ var colors = require('colors');
 var byline = require('byline');
 var fs = require('fs');
 var XSDifyJSONSchema = require('../lib/XSDifyJSONSchema')
+var xsd = require('libxml-xsd');
 
 var start = new Date();
 var argv = require('minimist')(process.argv.slice(2));
@@ -60,9 +61,25 @@ function processInput(data) {
 		process.exit();
 	}
 
-	console.log(XSDifyJSONSchema(jsonData, argv));
+	var options = {
+		"targetNamespace": argv.t,
+		"xmlNamespace": argv.x,
+		"elementFormDefault": argv.e,
+		"topLevel": argv.b 
+	};
 
-	//var end = new Date() - start;
+	var XSDString = XSDifyJSONSchema(jsonData, options);
+	var end = new Date() - start;
+	console.log(XSDString);
+	process.stdout.write(colors.green("\nConversion Execution time: " + end + "ms\n"));
+	/*try {
+		var schema = xsd.parse(XSDString); 
+	} catch (e) {
+		process.stderr.write(colors.red(e+"\n\n"));
+		process.exit();
+	}*/
+
+	//
 	//console.log(colors.green("Execution time: " + end + "ms"));
 }
 
