@@ -1,7 +1,7 @@
 {
   "name": "jsonschema2xsd",
   "version": "0.0.1",
-  "description": "testing oboe.js",
+  "description": "JSON Schema draft-03 conversion to XSD",
   "main": "jsonschema2xsd",
   "scripts": {
     "test": "jsonschema2xsd"
@@ -14,13 +14,10 @@
   "dependencies": {
     "byline": "^5.0.0",
     "jsonpath": "^0.2.7",
-    "lodash": "^4.15.0",
+    "libxml-xsd": "^0.5.2",
     "minimist": "^1.2.0",
-    "oboe": "^2.1.2",
     "pretty-data": "^0.40.0",
     "request": "^2.74.0",
-    "util": "^0.10.3",
-    "xml-writer": "^1.6.0",
-    "xpath": "0.0.23"
+    "xml-writer": "^1.6.0"
   }
 }
