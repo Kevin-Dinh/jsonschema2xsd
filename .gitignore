@@ -1,3 +1,4 @@
+bin/jsonschemagenerator.js
 bin/xsd2jsonschema.js
 bin/J2Xv2.js
 bin/dummyfile.js

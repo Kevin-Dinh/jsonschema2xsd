@@ -49,6 +49,7 @@ Command                      | Description
 
 - https://tools.ietf.org/rfcdiff?url1=draft-zyp-json-schema-03.txt&url2=draft-zyp-json-schema-04.txt
 - https://docs.oracle.com/cd/E12461_01/140/funtional_artifacts_guide/or-fasg-standards.htm
+- http://www.informatik.uni-ulm.de/pm/fileadmin/pm/home/fruehwirth/drafts/Bsc-Nogatz.pdf
 - https://tools.ietf.org/rfcdiff?url1=draft-zyp-json-schema-03.txt&url2=draft-zyp-json-schema-04.txt
 
 It's still a work in progress...

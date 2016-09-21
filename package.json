@@ -16,6 +16,7 @@
     "jsonpath": "^0.2.7",
     "libxml-xsd": "^0.5.2",
     "minimist": "^1.2.0",
+    "oboe": "^2.1.2",
     "pretty-data": "^0.40.0",
     "request": "^2.74.0",
     "xml-writer": "^1.6.0"

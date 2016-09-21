@@ -69,9 +69,10 @@ function processInput(data) {
 	};
 
 	var XSDString = XSDifyJSONSchema(jsonData, options);
-	var end = new Date() - start;
 	console.log(XSDString);
-	process.stdout.write(colors.green("\nConversion Execution time: " + end + "ms\n"));
+	
+	//var end = new Date() - start;
+	//process.stdout.write(colors.green("\nConversion Execution time: " + end + "ms\n"));
 	/*try {
 		var schema = xsd.parse(XSDString); 
 	} catch (e) {
