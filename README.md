@@ -1,5 +1,5 @@
 # jsonschema2xsd
-JSON Schema conversion to XSD.
+JSON Schema (Draft-03) conversion to XSD.
 
 ## Install
 ```bash
