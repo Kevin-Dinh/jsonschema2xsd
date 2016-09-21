@@ -23,6 +23,46 @@ Command                      | Description
 `jsonschema2xsd -u https://.../basicschema.json`       | Converts schema to xsd
 `cat schema.json | jsonschema2xsd`       | Converts pipe data to xsd
 
+```json
+{
+    "title": "Person",
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string"
+        },
+        "lastName": {
+            "type": "string"
+        },
+        "age": {
+            "description": "Age in years",
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}
+```
+
+```xml
+<?xml version="1.0"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element name="firstName" type="xs:string"/>
+      <xs:element name="lastName" type="xs:string"/>
+      <xs:element name="age">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+```
+
 ## LIMITATIONS
 - [Keywords for numbers](#keywords-for-numbers)
     - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
