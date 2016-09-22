@@ -53,6 +53,7 @@ Command                      | Description
     <xs:sequence>
       <xs:element name="firstName" type="xs:string"/>
       <xs:element name="lastName" type="xs:string"/>
+      <!--Age in years-->
       <xs:element name="age">
         <xs:simpleType>
           <xs:restriction base="xs:integer">
@@ -67,7 +68,6 @@ Command                      | Description
 
 ## LIMITATIONS
 - [Keywords for numbers](#keywords-for-numbers)
-    - [exclusiveMaximum / exclusiveMinimum](#maximum--minimum-and-exclusivemaximum--exclusiveminimum)
     - [divisibleBy](#) draft-03
 - [Keywords for strings](#keywords-for-strings)
     - [formatMaximum / formatMinimum and formatExclusiveMaximum / formatExclusiveMinimum] (v5)
@@ -75,17 +75,19 @@ Command                      | Description
     - [maxItems/minItems](#maxitems--minitems)
     - [uniqueItems](#) 
     - [additionalItems](#) 
-    - [contains](#contains-v5-proposal) (v5)
 - [Keywords for objects](#keywords-for-objects)
     - [maxProperties/minProperties](#maxproperties--minproperties)
     - [required draft-v04](#required)
     - [patternProperties](#patternproperties)
     - [additionalProperties](#additionalproperties)
     - [dependencies](#dependencies)
-    - [patternGroups](#patterngroups-v5-proposal) (v5)
-    - [patternRequired](#patternrequired-v5-proposal) (v5)
 - [Keywords for all types](#keywords-for-all-types)
-    - [enum](#enum)
+    - [constant](#)
+    - [not](#)
+    - [oneOf](#)
+    - [anyOf](#)
+    - [allOf](#)
+    - [switch](#)
 
 ## REFERENCES
 
