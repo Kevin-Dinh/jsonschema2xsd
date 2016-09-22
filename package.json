@@ -13,8 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "byline": "^5.0.0",
-    "jsonpath": "^0.2.7",
     "libxml-xsd": "^0.5.2",
+    "lodash": "^4.16.1",
     "minimist": "^1.2.0",
     "pretty-data": "^0.40.0",
     "request": "^2.74.0",
