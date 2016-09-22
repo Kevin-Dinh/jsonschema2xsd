@@ -4,3 +4,4 @@ bin/J2Xv2.js
 bin/dummyfile.js
 node_modules
 .vscode/
+npm-debug.log

@@ -14,7 +14,6 @@
   "dependencies": {
     "byline": "^5.0.0",
     "colors": "^1.1.2",
-    "libxml-xsd": "^0.5.2",
     "lodash": "^4.16.1",
     "minimist": "^1.2.0",
     "pretty-data": "^0.40.0",

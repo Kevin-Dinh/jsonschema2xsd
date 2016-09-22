@@ -5,7 +5,7 @@ var colors = require('colors');
 var byline = require('byline');
 var fs = require('fs');
 var XSDifyJSONSchema = require('../lib/XSDifyJSONSchema')
-var xsd = require('libxml-xsd');
+//var xsd = require('libxml-xsd');
 
 var start = new Date();
 var argv = require('minimist')(process.argv.slice(2));
