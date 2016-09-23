@@ -65,7 +65,7 @@ function processInput(data) {
 		"targetNamespace": argv.t,
 		"xmlNamespace": argv.x,
 		"elementFormDefault": argv.e,
-		"topLevel": argv.b 
+		"rootElement": argv.r 
 	};
 
 	var XSDString = XSDifyJSONSchema(jsonData, options);
@@ -92,7 +92,7 @@ function printHelp() {
 		"  -f  <filepath>   Convert JSON schema to XSD using given a filepath.\n" + 
 		"  -u  <filepath>   Convert JSON schema to XSD from a given URL\n" +
 		"  -r               Set Root Element or  the top level/global element name.(optional)\n" +
-		"					If not specified, attribute 'name' will be missing. Please take note that it's required to be a valid XSD schema."
+		"					If not specified, we will provide a default 'ROOT_OBJECT."
 		"                   e.g. -b SupplierBO\n" +
 		"                   If your JSON schema has no top level/global name, then\n" +  
 		"                   you should specify this option in order to have a valid schema.\n\n" +

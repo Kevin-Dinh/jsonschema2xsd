@@ -98,6 +98,7 @@ Command                      | Description
 - https://spacetelescope.github.io/understanding-json-schema/
 - https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints
 - http://www.datypic.com/books/defxmlschema/examples.html
+- https://devutilsonline.com/xsd-xml/generate-xml-from-xsd
 - http://json-schema.org/
 
 It's still a work in progress...
