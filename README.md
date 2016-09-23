@@ -49,20 +49,22 @@ Command                      | Description
 <?xml version="1.0"?>
 <xs:schema 
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:complexType name="Person">
-    <xs:sequence>
-      <xs:element name="firstName" type="xs:string"/>
-      <xs:element name="lastName" type="xs:string"/>
-      <!--Age in years-->
-      <xs:element name="age">
-        <xs:simpleType>
-          <xs:restriction base="xs:integer">
-            <xs:minInclusive value="0"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
+  <xs:element name="Person">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="firstName" type="xs:string"/>
+        <xs:element name="lastName" type="xs:string"/>
+        <!--Age in years-->
+        <xs:element name="age">
+          <xs:simpleType>
+            <xs:restriction base="xs:integer">
+              <xs:minInclusive value="0"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
 ```
 
