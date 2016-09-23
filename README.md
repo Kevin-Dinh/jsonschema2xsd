@@ -95,6 +95,7 @@ Command                      | Description
 - https://docs.oracle.com/cd/E12461_01/140/funtional_artifacts_guide/or-fasg-standards.htm
 - http://www.informatik.uni-ulm.de/pm/fileadmin/pm/home/fruehwirth/drafts/Bsc-Nogatz.pdf
 - https://spacetelescope.github.io/understanding-json-schema/
+- https://www.w3.org/TR/xmlschema-0/#OccurrenceConstraints
 - http://json-schema.org/
 
 It's still a work in progress...
